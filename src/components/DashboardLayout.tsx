@@ -1,6 +1,6 @@
+import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Button } from "@/components/ui/button";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const { logout } = useAuth();
@@ -18,7 +18,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           <div className="flex justify-between h-16">
             <div className="flex">
               <div className="flex-shrink-0 flex items-center">
-                <h1 className="text-xl font-bold">Company Dashboard</h1>
+                <h1 className="text-xl font-bold">Sistema de Controle</h1>
               </div>
               <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
                 <Button
@@ -26,28 +26,28 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
                   onClick={() => navigate('/dashboard')}
                   className="text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium"
                 >
-                  Overview
+                  Dashboard
                 </Button>
                 <Button
                   variant="ghost"
                   onClick={() => navigate('/dashboard/costs')}
                   className="text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium"
                 >
-                  Costs
+                  Custos
                 </Button>
                 <Button
                   variant="ghost"
                   onClick={() => navigate('/dashboard/products')}
                   className="text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium"
                 >
-                  Products
+                  Produtos
                 </Button>
                 <Button
                   variant="ghost"
                   onClick={() => navigate('/dashboard/services')}
                   className="text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium"
                 >
-                  Services
+                  Serviços
                 </Button>
               </div>
             </div>

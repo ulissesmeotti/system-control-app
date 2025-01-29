@@ -1,10 +1,10 @@
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 import { useState } from 'react';
 import DashboardLayout from '../components/DashboardLayout';
 import { useData } from '../contexts/DataContext';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useToast } from "@/components/ui/use-toast";
 
 const Services = () => {
   const { data, addService, updateService } = useData();
@@ -46,12 +46,12 @@ const Services = () => {
       <div className="space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle>Add New Service</CardTitle>
+            <CardTitle>Adicionar Novo Serviço</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Title</label>
+                <label className="block text-sm font-medium text-gray-700">Título</label>
                 <Input
                   type="text"
                   value={title}
@@ -61,7 +61,7 @@ const Services = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Quantity</label>
+                <label className="block text-sm font-medium text-gray-700">Quantidade</label>
                 <Input
                   type="number"
                   value={quantity}
@@ -72,7 +72,7 @@ const Services = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Value per Unit</label>
+                <label className="block text-sm font-medium text-gray-700">Valor por Unidade</label>
                 <Input
                   type="number"
                   value={value}
@@ -84,7 +84,7 @@ const Services = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Due Date</label>
+                <label className="block text-sm font-medium text-gray-700">Data da Entrega</label>
                 <Input
                   type="date"
                   value={dueDate}
@@ -93,7 +93,7 @@ const Services = () => {
                   className="mt-1"
                 />
               </div>
-              <Button type="submit">Add Service</Button>
+              <Button type="submit">Adicionar</Button>
             </form>
           </CardContent>
         </Card>
@@ -101,7 +101,7 @@ const Services = () => {
         <div className="grid gap-6 md:grid-cols-2">
           <Card>
             <CardHeader>
-              <CardTitle>Pending Services</CardTitle>
+              <CardTitle>Serviços Pendentes</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -110,7 +110,7 @@ const Services = () => {
                     <div>
                       <h3 className="font-medium">{service.title}</h3>
                       <p className="text-sm text-gray-500">
-                        Quantity: {service.quantity} | Due: {new Date(service.dueDate).toLocaleDateString()}
+                        Quantidade: {service.quantity} | Due: {new Date(service.dueDate).toLocaleDateString()}
                       </p>
                       <p className="font-medium">
                         ${service.value.toFixed(2)} x {service.quantity} = ${(service.value * service.quantity).toFixed(2)}
@@ -120,7 +120,7 @@ const Services = () => {
                       variant="outline"
                       onClick={() => markAsPaid(service.id)}
                     >
-                      Mark as Paid
+                      Marcar como pago
                     </Button>
                   </div>
                 ))}
@@ -130,7 +130,7 @@ const Services = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle>Completed Services</CardTitle>
+              <CardTitle>Serviços Entregues</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -139,7 +139,7 @@ const Services = () => {
                     <div>
                       <h3 className="font-medium">{service.title}</h3>
                       <p className="text-sm text-gray-500">
-                        Quantity: {service.quantity} | Completed: {new Date(service.dueDate).toLocaleDateString()}
+                        Quantidade: {service.quantity} | Completos: {new Date(service.dueDate).toLocaleDateString()}
                       </p>
                       <p className="text-green-600 font-medium">
                         ${service.value.toFixed(2)} x {service.quantity} = ${(service.value * service.quantity).toFixed(2)}

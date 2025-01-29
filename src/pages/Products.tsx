@@ -1,10 +1,10 @@
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 import { useState } from 'react';
 import DashboardLayout from '../components/DashboardLayout';
 import { useData } from '../contexts/DataContext';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useToast } from "@/components/ui/use-toast";
 
 const Products = () => {
   const { data, addProduct, updateProduct } = useData();
@@ -43,12 +43,12 @@ const Products = () => {
       <div className="space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle>Add New Product</CardTitle>
+            <CardTitle>Adicionar Novo Produto</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Name</label>
+                <label className="block text-sm font-medium text-gray-700">Nome</label>
                 <Input
                   type="text"
                   value={name}
@@ -58,7 +58,7 @@ const Products = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Stock</label>
+                <label className="block text-sm font-medium text-gray-700">Estoque</label>
                 <Input
                   type="number"
                   value={stock}
@@ -69,7 +69,7 @@ const Products = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Value</label>
+                <label className="block text-sm font-medium text-gray-700">Valor</label>
                 <Input
                   type="number"
                   value={value}
@@ -80,7 +80,7 @@ const Products = () => {
                   className="mt-1"
                 />
               </div>
-              <Button type="submit">Add Product</Button>
+              <Button type="submit">Adicionar</Button>
             </form>
           </CardContent>
         </Card>
@@ -88,7 +88,7 @@ const Products = () => {
         <div className="grid gap-6 md:grid-cols-2">
           <Card>
             <CardHeader>
-              <CardTitle>In Stock</CardTitle>
+              <CardTitle>Em estoque</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -103,7 +103,7 @@ const Products = () => {
                       variant="outline"
                       onClick={() => markAsSold(product.id)}
                     >
-                      Mark as Sold
+                      Marcar como vendido
                     </Button>
                   </div>
                 ))}
@@ -113,7 +113,7 @@ const Products = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle>Sold</CardTitle>
+              <CardTitle>Vendido</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -121,7 +121,7 @@ const Products = () => {
                   <div key={product.id} className="flex items-center justify-between p-4 bg-white rounded-lg shadow">
                     <div>
                       <h3 className="font-medium">{product.name}</h3>
-                      <p className="text-sm text-gray-500">Stock: {product.stock}</p>
+                      <p className="text-sm text-gray-500">Estoque: {product.stock}</p>
                       <p className="text-green-600 font-medium">${product.value.toFixed(2)}</p>
                     </div>
                   </div>

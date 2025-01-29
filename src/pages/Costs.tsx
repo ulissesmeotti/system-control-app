@@ -1,10 +1,10 @@
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 import { useState } from 'react';
 import DashboardLayout from '../components/DashboardLayout';
 import { useData } from '../contexts/DataContext';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useToast } from "@/components/ui/use-toast";
 
 const Costs = () => {
   const { data, addCost, updateCost } = useData();
@@ -43,12 +43,12 @@ const Costs = () => {
       <div className="space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle>Add New Cost</CardTitle>
+            <CardTitle>Adicionar Despesa</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Title</label>
+                <label className="block text-sm font-medium text-gray-700">Título</label>
                 <Input
                   type="text"
                   value={title}
@@ -58,7 +58,7 @@ const Costs = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Amount</label>
+                <label className="block text-sm font-medium text-gray-700">Valor</label>
                 <Input
                   type="number"
                   value={amount}
@@ -70,7 +70,7 @@ const Costs = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Due Date</label>
+                <label className="block text-sm font-medium text-gray-700">Data do Vencimento</label>
                 <Input
                   type="date"
                   value={dueDate}
@@ -79,7 +79,7 @@ const Costs = () => {
                   className="mt-1"
                 />
               </div>
-              <Button type="submit">Add Cost</Button>
+              <Button type="submit">Adicionar</Button>
             </form>
           </CardContent>
         </Card>
@@ -87,7 +87,7 @@ const Costs = () => {
         <div className="grid gap-6 md:grid-cols-2">
           <Card>
             <CardHeader>
-              <CardTitle>To Be Paid</CardTitle>
+              <CardTitle>Para pagar</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -95,14 +95,14 @@ const Costs = () => {
                   <div key={cost.id} className="flex items-center justify-between p-4 bg-white rounded-lg shadow">
                     <div>
                       <h3 className="font-medium">{cost.title}</h3>
-                      <p className="text-sm text-gray-500">Due: {new Date(cost.dueDate).toLocaleDateString()}</p>
+                      <p className="text-sm text-gray-500">Vencimento: {new Date(cost.dueDate).toLocaleDateString()}</p>
                       <p className="text-red-600 font-medium">${cost.amount.toFixed(2)}</p>
                     </div>
                     <Button
                       variant="outline"
                       onClick={() => togglePaid(cost.id, cost.paid)}
                     >
-                      Mark as Paid
+                      Marcar como paga
                     </Button>
                   </div>
                 ))}
@@ -112,7 +112,7 @@ const Costs = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle>Paid</CardTitle>
+              <CardTitle>Pagas</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -120,14 +120,14 @@ const Costs = () => {
                   <div key={cost.id} className="flex items-center justify-between p-4 bg-white rounded-lg shadow">
                     <div>
                       <h3 className="font-medium">{cost.title}</h3>
-                      <p className="text-sm text-gray-500">Paid on: {new Date(cost.dueDate).toLocaleDateString()}</p>
+                      <p className="text-sm text-gray-500">Paga em: {new Date(cost.dueDate).toLocaleDateString()}</p>
                       <p className="text-green-600 font-medium">${cost.amount.toFixed(2)}</p>
                     </div>
                     <Button
                       variant="outline"
                       onClick={() => togglePaid(cost.id, cost.paid)}
                     >
-                      Mark as Unpaid
+                      Desmarcar paga
                     </Button>
                   </div>
                 ))}

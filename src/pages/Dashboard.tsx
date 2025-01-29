@@ -1,8 +1,8 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
+import { CartesianGrid, Cell, Legend, Line, LineChart, Pie, PieChart, XAxis, YAxis } from 'recharts';
 import DashboardLayout from '../components/DashboardLayout';
 import { useData } from '../contexts/DataContext';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell } from 'recharts';
-import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 
 const Dashboard = () => {
   const { data } = useData();
@@ -82,18 +82,18 @@ const Dashboard = () => {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardHeader>
-            <CardTitle>Costs Overview</CardTitle>
+            <CardTitle>Custos Totais</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span>To be paid:</span>
+                <span>Para pagar:</span>
                 <span className="font-semibold text-red-600">
                   ${totalUnpaidCosts.toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span>Paid:</span>
+                <span>Pagos:</span>
                 <span className="font-semibold text-green-600">
                   ${totalPaidCosts.toFixed(2)}
                 </span>
@@ -104,18 +104,18 @@ const Dashboard = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Products Overview</CardTitle>
+            <CardTitle>Total de Produtos</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span>In Stock Value:</span>
+                <span>Valor em Estoque:</span>
                 <span className="font-semibold">
                   ${totalProductValue.toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span>Sold Value:</span>
+                <span>Valor Vendido:</span>
                 <span className="font-semibold text-green-600">
                   ${totalSoldValue.toFixed(2)}
                 </span>
@@ -126,18 +126,18 @@ const Dashboard = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Services Overview</CardTitle>
+            <CardTitle>Serviços Feitos</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span>Pending:</span>
+                <span>Pendentes:</span>
                 <span className="font-semibold">
                   ${totalServiceValue.toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span>Completed:</span>
+                <span>Completos:</span>
                 <span className="font-semibold text-green-600">
                   ${totalPaidServices.toFixed(2)}
                 </span>
@@ -150,7 +150,7 @@ const Dashboard = () => {
       <div className="grid gap-4 mt-6">
         <Card>
           <CardHeader>
-            <CardTitle>Monthly Overview</CardTitle>
+            <CardTitle>Total do Mês</CardTitle>
           </CardHeader>
           <CardContent className="h-[400px]">
             <ChartContainer
@@ -182,49 +182,69 @@ const Dashboard = () => {
             </ChartContainer>
           </CardContent>
         </Card>
-
         <Card>
-          <CardHeader>
-            <CardTitle>Revenue Distribution</CardTitle>
-          </CardHeader>
-          <CardContent className="h-[400px]">
-            <ChartContainer
-              className="h-[300px]"
-              config={{
-                products: {
-                  theme: {
-                    light: "#0088FE",
-                    dark: "#0088FE",
-                  },
-                },
-                services: {
-                  theme: {
-                    light: "#00C49F",
-                    dark: "#00C49F",
-                  },
-                },
-              }}
-            >
-              <PieChart>
-                <Pie
-                  data={revenueDistribution}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                  outerRadius={100}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {revenueDistribution.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <ChartTooltip />
-              </PieChart>
-            </ChartContainer>
-          </CardContent>
-        </Card>
+  <CardHeader>
+    <CardTitle>Distribuição do faturamento</CardTitle>
+  </CardHeader>
+  <CardContent className="flex h-[400px]">
+    {/* Gráfico de pizza */}
+    <div className="w-1/2 h-full">
+      <ChartContainer
+        className="h-[300px]"
+        config={{
+          products: {
+            theme: {
+              light: "#0088FE",
+              dark: "#0088FE",
+            },
+          },
+          services: {
+            theme: {
+              light: "#00C49F",
+              dark: "#00C49F",
+            },
+          },
+        }}
+      >
+        <PieChart>
+          <Pie
+            data={revenueDistribution}
+            cx="50%"
+            cy="50%"
+            labelLine={false}
+            label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+            outerRadius={100}
+            fill="#8884d8"
+            dataKey="value"
+          >
+            {revenueDistribution.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            ))}
+          </Pie>
+          <ChartTooltip />
+        </PieChart>
+      </ChartContainer>
+    </div>
+
+    {/* Detalhes das vendas/serviços */}
+    <div className="w-1/2 h-full pl-4 overflow-y-auto">
+      <h3 className="text-lg font-bold mb-2">Detalhes do faturamento</h3>
+      <ul className="space-y-2">
+        {revenueDistribution.map((item, index) => (
+          <li key={index} className="flex items-start">
+            <span
+              className="w-4 h-4 rounded-full mr-2"
+              style={{ backgroundColor: COLORS[index % COLORS.length] }}
+            ></span>
+            <div>
+              <p className="text-sm font-medium">{item.name}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </CardContent>
+</Card>
       </div>
     </DashboardLayout>
   );
