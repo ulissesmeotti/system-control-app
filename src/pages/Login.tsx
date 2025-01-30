@@ -26,31 +26,39 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="p-8 bg-white rounded-lg shadow-lg w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center mb-6">Sistema de Controle</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div
+      className="min-h-screen flex items-center justify-center bg-cover bg-center"
+      style={{ backgroundImage: "url('/images/img-tela-loginn.jpg')" }}
+    >
+      <div className="p-8 bg-white/90 backdrop-blur-sm rounded-lg shadow-2xl w-full max-w-md border border-gray-200">
+        <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">Login</h1>
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Username</label>
+            <label className="block text-sm font-medium text-black-700 mb-2">Username</label>
             <Input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="mt-1"
+              className="w-full px-4 py-2 border border-black-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+              placeholder="Digite seu usuário"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Password</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
             <Input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+              placeholder="Digite sua senha"
               required
             />
           </div>
-          <Button type="submit" className="w-full">
+          <Button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition-all"
+          >
             Login
           </Button>
         </form>

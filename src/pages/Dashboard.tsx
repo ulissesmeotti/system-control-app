@@ -1,63 +1,69 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
-import { CartesianGrid, Cell, Legend, Line, LineChart, Pie, PieChart, XAxis, YAxis } from 'recharts';
-import DashboardLayout from '../components/DashboardLayout';
-import { useData } from '../contexts/DataContext';
+import { CartesianGrid, Cell, Legend, Line, LineChart, Pie, PieChart, XAxis, YAxis } from "recharts";
+import DashboardLayout from "../components/DashboardLayout";
+import { useData } from "../contexts/DataContext";
 
 const Dashboard = () => {
   const { data } = useData();
 
-  // Calculate totals as before
+  // Calculate totals
   const totalUnpaidCosts = data.costs
-    .filter(cost => !cost.paid)
+    .filter((cost) => !cost.paid)
     .reduce((sum, cost) => sum + cost.amount, 0);
 
   const totalPaidCosts = data.costs
-    .filter(cost => cost.paid)
+    .filter((cost) => cost.paid)
     .reduce((sum, cost) => sum + cost.amount, 0);
 
   const totalProductValue = data.products
-    .filter(product => !product.sold)
-    .reduce((sum, product) => sum + (product.value * product.stock), 0);
+    .filter((product) => !product.sold)
+    .reduce((sum, product) => sum + product.value * product.stock, 0);
 
   const totalSoldValue = data.products
-    .filter(product => product.sold)
+    .filter((product) => product.sold)
     .reduce((sum, product) => sum + product.value, 0);
 
   const totalServiceValue = data.services
-    .filter(service => !service.paid)
-    .reduce((sum, service) => sum + (service.value * service.quantity), 0);
+    .filter((service) => !service.paid)
+    .reduce((sum, service) => sum + service.value * service.quantity, 0);
 
   const totalPaidServices = data.services
-    .filter(service => service.paid)
-    .reduce((sum, service) => sum + (service.value * service.quantity), 0);
+    .filter((service) => service.paid)
+    .reduce((sum, service) => sum + service.value * service.quantity, 0);
+
+  // Calculate real profit
+  const realProfit = totalSoldValue + totalPaidServices - totalPaidCosts;
+
+  // Calculate total revenue
+  const totalRevenue = totalSoldValue + totalPaidServices;
 
   // Prepare data for monthly chart
   const getMonthlyData = () => {
-    const monthlyData: { name: string; costs: number; revenue: number; }[] = [];
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    
+    const monthlyData = [];
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
     months.forEach((month, index) => {
       const monthCosts = data.costs
-        .filter(cost => {
+        .filter((cost) => {
           const costDate = new Date(cost.dueDate);
           return costDate.getMonth() === index && cost.paid;
         })
         .reduce((sum, cost) => sum + cost.amount, 0);
 
       const monthProductRevenue = data.products
-        .filter(product => {
-          const soldDate = new Date();  // In a real app, we'd store the sold date
+        .filter((product) => {
+          const soldDate = new Date(); // In a real app, we'd store the sold date
           return soldDate.getMonth() === index && product.sold;
         })
         .reduce((sum, product) => sum + product.value, 0);
 
       const monthServiceRevenue = data.services
-        .filter(service => {
+        .filter((service) => {
           const paidDate = new Date(service.dueDate);
           return paidDate.getMonth() === index && service.paid;
         })
-        .reduce((sum, service) => sum + (service.value * service.quantity), 0);
+        .reduce((sum, service) => sum + service.value * service.quantity, 0);
 
       monthlyData.push({
         name: month,
@@ -71,15 +77,26 @@ const Dashboard = () => {
 
   // Prepare data for revenue distribution pie chart
   const revenueDistribution = [
-    { name: 'Products', value: totalSoldValue },
-    { name: 'Services', value: totalPaidServices },
+    { name: "Products", value: totalSoldValue },
+    { name: "Services", value: totalPaidServices },
   ];
 
-  const COLORS = ['#0088FE', '#00C49F'];
+  const COLORS = ["#0088FE", "#00C49F"];
 
   return (
     <DashboardLayout>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>Lucro Real</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-xl font-bold text-green-600">
+              ${realProfit.toFixed(2)}
+            </div>
+          </CardContent>
+        </Card>
+
         <Card>
           <CardHeader>
             <CardTitle>Custos Totais</CardTitle>
@@ -152,9 +169,9 @@ const Dashboard = () => {
           <CardHeader>
             <CardTitle>Total do Mês</CardTitle>
           </CardHeader>
-          <CardContent className="h-[400px]">
+          <CardContent className="h-[200px] sm:h-[400px]">
             <ChartContainer
-              className="h-[300px]"
+              className="h-[180px] sm:h-[300px]"
               config={{
                 costs: {
                   theme: {
@@ -170,7 +187,10 @@ const Dashboard = () => {
                 },
               }}
             >
-              <LineChart data={getMonthlyData()} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+              <LineChart
+                data={getMonthlyData()}
+                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+              >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
@@ -182,69 +202,86 @@ const Dashboard = () => {
             </ChartContainer>
           </CardContent>
         </Card>
-        <Card>
-  <CardHeader>
-    <CardTitle>Distribuição do faturamento</CardTitle>
-  </CardHeader>
-  <CardContent className="flex h-[400px]">
-    {/* Gráfico de pizza */}
-    <div className="w-1/2 h-full">
-      <ChartContainer
-        className="h-[300px]"
-        config={{
-          products: {
-            theme: {
-              light: "#0088FE",
-              dark: "#0088FE",
-            },
-          },
-          services: {
-            theme: {
-              light: "#00C49F",
-              dark: "#00C49F",
-            },
-          },
-        }}
-      >
-        <PieChart>
-          <Pie
-            data={revenueDistribution}
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-            outerRadius={100}
-            fill="#8884d8"
-            dataKey="value"
-          >
-            {revenueDistribution.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-            ))}
-          </Pie>
-          <ChartTooltip />
-        </PieChart>
-      </ChartContainer>
-    </div>
 
-    {/* Detalhes das vendas/serviços */}
-    <div className="w-1/2 h-full pl-4 overflow-y-auto">
-      <h3 className="text-lg font-bold mb-2">Detalhes do faturamento</h3>
-      <ul className="space-y-2">
-        {revenueDistribution.map((item, index) => (
-          <li key={index} className="flex items-start">
-            <span
-              className="w-4 h-4 rounded-full mr-2"
-              style={{ backgroundColor: COLORS[index % COLORS.length] }}
-            ></span>
-            <div>
-              <p className="text-sm font-medium">{item.name}</p>
+        <Card>
+          <CardHeader>
+            <CardTitle>Distribuição do Faturamento</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col sm:flex-row h-[200px] sm:h-[400px] gap-4">
+            {/* Gráfico de Pizza */}
+            <div className="w-full sm:w-1/2 h-[150px] sm:h-[300px] flex items-center justify-center">
+              <ChartContainer
+                className="h-full w-full"
+                config={{
+                  products: {
+                    theme: {
+                      light: "#0088FE",
+                      dark: "#0088FE",
+                    },
+                  },
+                  services: {
+                    theme: {
+                      light: "#00C49F",
+                      dark: "#00C49F",
+                    },
+                  },
+                }}
+              >
+                <PieChart>
+                  <Pie
+                    data={revenueDistribution}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={({ name, percent, value }) =>
+                      `${name}: ${(percent * 100).toFixed(0)}%\nR$ ${value.toLocaleString()}`
+                    }
+                    outerRadius={80}
+                    innerRadius={40}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {revenueDistribution.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <ChartTooltip
+                    formatter={(value) => `R$ ${value.toLocaleString()}`}
+                  />
+                </PieChart>
+              </ChartContainer>
             </div>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </CardContent>
-</Card>
+
+            {/* Detalhes do Faturamento */}
+            <div className="w-full sm:w-1/2 h-full pl-4 overflow-y-auto">
+              <h3 className="text-lg font-bold mb-4">Detalhes do Faturamento</h3>
+              <ul className="space-y-3">
+                {revenueDistribution.map((item, index) => (
+                  <li key={index} className="flex items-start">
+                    <span
+                      className="w-4 h-4 rounded-full mr-2 mt-1"
+                      style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                    ></span>
+                    <div>
+                      <p className="text-sm font-medium">{item.name}</p>
+                      <p className="text-sm text-gray-600">
+                        R$ {item.value.toLocaleString()} ({((item.value / totalRevenue) * 100).toFixed(1)}%)
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                <p className="text-sm font-medium text-gray-700">
+                  Total: <span className="font-semibold">R$ {totalRevenue.toLocaleString()}</span>
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </DashboardLayout>
   );
